@@ -184,6 +184,21 @@ HM.CreateEmuIcon = function(protect : ImageLabel, text : string)
 	label.TextColor3 = protect.ImageColor3
 end;
 
+HM.HookAssetId = function()
+	if hookfunc or hookfunction then
+		local hooking = hookfunc or hookfunction or function() end;
+		local newCclosure = newcclosure or function() end;
+		
+		hooking(game:GetService('ContentProvider').PreloadAsync,function()
+			return 1;
+		end);
+		
+		hooking(game:GetService('ContentProvider').Preload,function()
+			return 2;
+		end);
+	end;
+end;
+
 HM.Assets = { -- Icons
 	["lucide-accessibility"] = "rbxassetid://10709751939",
 	["lucide-activity"] = "rbxassetid://10709752035",
@@ -1039,33 +1054,33 @@ function HM.new(self)
 	HarmonyLib.IgnoreGuiInset = true
 	HarmonyLib.ZIndexBehavior = Enum.ZIndexBehavior.Global
 	HarmonyLib.Name = HM:RNHash();
-	
+
 	if protect_gui or protectgui then
 		(protect_gui or protectgui)(HarmonyLib);
 	end;
-	
+
 	task.delay(1,function()
 		for index = 1 , math.random(55,100) do task.wait();
 			local folder = Instance.new('Folder',HarmonyLib);
-			
+
 			folder.Name = HM:RNHash();
-			
+
 			Instance.new('ModuleScript',folder).Name = HM:RNHash();
 			Instance.new('BindableEvent',folder).Name = HM:RNHash();
 		end;
-		
+
 		for index = 1 , math.random(55,100) do task.wait();
 			local folder = Instance.new('Folder',WindowFrame);
 
 			folder.Name = HM:RNHash();
-			
+
 			Instance.new('ModuleScript',folder).Name = HM:RNHash();
 			Instance.new('BindableEvent',folder).Name = HM:RNHash();
 		end;
 	end)
-	
+
 	self.Root = HarmonyLib;
-	
+
 	WindowFrame.Name = HM:RNHash();
 	WindowFrame.Parent = HarmonyLib
 	WindowFrame.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -1077,7 +1092,7 @@ function HM.new(self)
 	WindowFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 	WindowFrame.Size = UDim2.fromOffset(0,22)
 	WindowFrame.Active = true
-	
+
 	TweenSv:Create(WindowFrame , TweenInfo.new(1,Enum.EasingStyle.Quint,Enum.EasingDirection.InOut),{
 		Size = UDim2.new(self.Scale.X.Scale,self.Scale.X.Offset,0,21)
 	}):Play()
@@ -1097,7 +1112,7 @@ function HM.new(self)
 	UICorner.CornerRadius = UDim.new(0, 4)
 	UICorner.Parent = WindowFrame
 	UICorner.Name = HM:RNHash();
-	
+
 	DropShadow.Name = HM:RNHash();
 	DropShadow.Parent = WindowFrame
 	DropShadow.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -1113,7 +1128,7 @@ function HM.new(self)
 	DropShadow.ScaleType = Enum.ScaleType.Slice
 	DropShadow.SliceCenter = Rect.new(49, 49, 450, 450)
 	DropShadow.Name = HM:RNHash();
-	
+
 	Headers.Name = HM:RNHash();
 	Headers.Parent = WindowFrame
 	Headers.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -1123,7 +1138,7 @@ function HM.new(self)
 	Headers.Size = UDim2.new(1, 0, 0, 22)
 	Headers.ZIndex = 5
 	Headers.Name = HM:RNHash();
-	
+
 	WindowText.Name = HM:RNHash();
 	WindowText.Parent = Headers
 	WindowText.AnchorPoint = Vector2.new(0, 0.5)
@@ -1141,7 +1156,7 @@ function HM.new(self)
 	WindowText.TextTransparency = 1;
 	WindowText.RichText = true
 	WindowText.Name = HM:RNHash();
-	
+
 	TweenSv:Create(WindowText,TweenInfo.new(2,Enum.EasingStyle.Quint,Enum.EasingDirection.InOut),{
 		TextTransparency = 0,
 		Position = UDim2.new(0, 4, 0.5, 0)
@@ -1157,7 +1172,7 @@ function HM.new(self)
 	Frame.Size = UDim2.new(0, 55, 0.5, 0)
 	Frame.ZIndex = 4
 	Frame.Name = HM:RNHash();
-	
+
 	UIListLayout.Parent = Frame
 	UIListLayout.FillDirection = Enum.FillDirection.Horizontal
 	UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
@@ -1165,7 +1180,7 @@ function HM.new(self)
 	UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
 	UIListLayout.Padding = UDim.new(0, 5)
 	UIListLayout.Name = HM:RNHash();
-	
+
 	MinButton.Name = HM:RNHash();
 	MinButton.Parent = Frame
 	MinButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -1175,17 +1190,17 @@ function HM.new(self)
 	MinButton.Size = UDim2.new(1, 0, 1, 0)
 	MinButton.SizeConstraint = Enum.SizeConstraint.RelativeYY
 	MinButton.ZIndex = 25
-	
+
 	if HM.EnableIcon then
 		MinButton.Image = "rbxassetid://9886659276";	
 	else
 		HM.CreateEmuIcon(MinButton , "-")
 	end
-	
+
 	MinButton.Active = true
-	
-	
-	
+
+
+
 	CloseButton.Name = HM:RNHash();
 	CloseButton.Parent = Frame
 	CloseButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -1195,7 +1210,7 @@ function HM.new(self)
 	CloseButton.Size = UDim2.new(1, 0, 1, 0)
 	CloseButton.SizeConstraint = Enum.SizeConstraint.RelativeYY
 	CloseButton.ZIndex = 6
-	
+
 	if HM.EnableIcon then
 		CloseButton.Image = "rbxassetid://9886659671"
 	else
@@ -1235,13 +1250,13 @@ function HM.new(self)
 	ScrollingFrame.Size = UDim2.new(1, -2, 1, -2)
 	ScrollingFrame.ScrollBarThickness = 0
 	ScrollingFrame.Name = HM:RNHash();
-	
+
 	UIListLayout_2.Parent = ScrollingFrame
 	UIListLayout_2.HorizontalAlignment = Enum.HorizontalAlignment.Center
 	UIListLayout_2.SortOrder = Enum.SortOrder.LayoutOrder
 	UIListLayout_2.Padding = UDim.new(0, 100)
 	UIListLayout_2.Name = HM:RNHash();
-	
+
 	UIListLayout_2:GetPropertyChangedSignal('AbsoluteContentSize'):Connect(function()
 		ScrollingFrame.CanvasSize = UDim2.new(0,0,0,UIListLayout_2.AbsoluteContentSize.Y + 10)
 	end)
@@ -1272,7 +1287,7 @@ function HM.new(self)
 	TabFrames.Position = UDim2.new(0, 145, 0, 22)
 	TabFrames.Size = UDim2.new(1, -145, 1, -22)
 	TabFrames.ZIndex = 4
-	
+
 	do
 		self.Dropdown.Visible = false;
 
@@ -1310,13 +1325,13 @@ function HM.new(self)
 		ScrollingFrame.ZIndex = 56
 		ScrollingFrame.ScrollBarThickness = 1
 		ScrollingFrame.Name = HM:RNHash();
-		
+
 		UIListLayout.Parent = ScrollingFrame
 		UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 		UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 		UIListLayout.Padding = UDim.new(0, 4)
 		UIListLayout.Name = HM:RNHash();
-		
+
 		UIListLayout:GetPropertyChangedSignal('AbsoluteContentSize'):Connect(function()
 			ScrollingFrame.CanvasSize = UDim2.new(0,0,0,UIListLayout.AbsoluteContentSize.Y)
 		end)
@@ -1370,12 +1385,13 @@ function HM.new(self)
 			return bth;
 		end;
 
-		function DropdownSyyu:Init(data : {string | any}, Default : string | any, Multi : boolean, BaseFrame : Frame , Callback : any)
+		function DropdownSyyu:Init(data : {string | any}, Default : string | any, Multi : boolean, BaseFrame : Frame , Callback : any , SearchBar : boolean)
 			DropdownSyyu.Data = data;
 			DropdownSyyu.Multi = Multi;	
 			DropdownSyyu.BaseFrame = BaseFrame;
 			DropdownSyyu.Visible = true;
-
+			DropdownSyyu.SearchBar = SearchBar;
+			
 			for i,v in next , ScrollingFrame:GetChildren() do
 				if v:IsA('Frame') then
 					v:Destroy();
@@ -1463,26 +1479,133 @@ function HM.new(self)
 			end;
 		end);
 
-		RunService:BindToRenderStep("__DROPDOWN_INIT__"..HM:RNHash(),56,function()
-			if DropdownSyyu.Visible then
-				local BaseFrame : Frame = DropdownSyyu.BaseFrame;
+		do
+			local SearchBar = Instance.new("Frame")
+			local UICorner = Instance.new("UICorner")
+			local TextBox = Instance.new("TextBox")
 
-				TweenSv:Create(DropdownFrame,TweenInfo.new(0.15),{
-					Size = UDim2.new(0, 153, 0, math.clamp(UIListLayout.AbsoluteContentSize.Y + 11,11,350)),
-					Position = UDim2.fromOffset(BaseFrame.AbsolutePosition.X + (BaseFrame.AbsoluteSize.X / 2),BaseFrame.AbsolutePosition.Y + math.abs(HarmonyLib.AbsolutePosition.Y))
-				}):Play();
-			else
-				TweenSv:Create(DropdownFrame,TweenInfo.new(0.15),{
-					Size = UDim2.new(0, 153, 0, 0),
-				}):Play();
-			end;
+			SearchBar.Name = HM:RNHash()
+			SearchBar.Parent = HarmonyLib
+			SearchBar.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
+			SearchBar.BorderColor3 = Color3.fromRGB(0, 0, 0)
+			SearchBar.BorderSizePixel = 0
+			SearchBar.ClipsDescendants = true
+			SearchBar.Position = UDim2.new(0.624000013, 0, 0.439999998, 0)
+			SearchBar.Size = UDim2.new(0, 153, 0, 25)
+			SearchBar.ZIndex = 54
 
-			if DropdownFrame.Size.Y.Offset <= 3 then
-				DropdownFrame.Visible = false;
-			else
-				DropdownFrame.Visible = true;
-			end;
-		end);
+			UICorner.CornerRadius = UDim.new(0, 4)
+			UICorner.Parent = SearchBar
+			
+			TextBox.Name = HM:RNHash();
+			TextBox.Parent = SearchBar
+			TextBox.AnchorPoint = Vector2.new(0.5, 0.5)
+			TextBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+			TextBox.BackgroundTransparency = 1.000
+			TextBox.BorderColor3 = Color3.fromRGB(0, 0, 0)
+			TextBox.BorderSizePixel = 0
+			TextBox.Position = UDim2.new(0.5, 0, 0.5, 0)
+			TextBox.Size = UDim2.new(1, -5, 1, -5)
+			TextBox.ClearTextOnFocus = false
+			TextBox.Font = Enum.Font.GothamMedium
+			TextBox.PlaceholderText = "Search"
+			TextBox.Text = ""
+			TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+			TextBox.TextSize = 11.000
+			TextBox.ZIndex = 55
+			
+			SearchBar.MouseEnter:Connect(function()
+				IsHover = true;
+			end)
+
+			SearchBar.MouseLeave:Connect(function()
+				IsHover = false;
+			end)
+			
+			TextBox.Focused:Connect(function()
+				IsHover = true;
+			end)
+			
+			TextBox.FocusLost:Connect(function()
+				IsHover = true;
+			end)
+			
+			TextBox:GetPropertyChangedSignal('Text'):Connect(function()
+				if TextBox.Text:byte() then
+					if DropdownSyyu.Visible then
+						for i,v in next , ScrollingFrame:GetChildren() do
+							if (i % 50) == 1 then
+								task.wait();
+							end;
+							
+							if v:IsA('Frame') then
+								local Text = v:FindFirstChildWhichIsA('TextLabel',true);
+								
+								if Text then
+									if string.find(string.lower(Text.Text) , string.lower(TextBox.Text) ,1 , true) then
+										v.Visible = true;
+									else
+										v.Visible = false;
+									end;
+								end;
+							end;
+						end;
+					end;
+				else
+					
+					for i,v in next , ScrollingFrame:GetChildren() do
+						if (i % 50) == 1 then
+							task.wait();
+						end;
+
+						if v:IsA('Frame') then
+							v.Visible = true
+						end;
+					end;
+				end;
+			end)
+			
+			RunService:BindToRenderStep("__DROPDOWN_INIT__"..HM:RNHash(),56,function()
+				if DropdownSyyu.Visible then
+					
+					
+					local BaseFrame : Frame = DropdownSyyu.BaseFrame;
+
+					TweenSv:Create(DropdownFrame,TweenInfo.new(0.15),{
+						Size = UDim2.new(0, 153, 0, math.clamp(UIListLayout.AbsoluteContentSize.Y + 11,11,350)),
+						Position = UDim2.fromOffset(BaseFrame.AbsolutePosition.X + (BaseFrame.AbsoluteSize.X / 2),BaseFrame.AbsolutePosition.Y + math.abs(HarmonyLib.AbsolutePosition.Y))
+					}):Play();
+					
+					if DropdownSyyu.SearchBar then
+						SearchBar.Visible = true;
+						
+						local yBase = (BaseFrame.AbsolutePosition.Y + math.abs(HarmonyLib.AbsolutePosition.Y)) - DropdownFrame.AbsoluteSize.Y;
+
+						TweenSv:Create(SearchBar,TweenInfo.new(0.15),{
+							Size = UDim2.new(0, DropdownFrame.AbsoluteSize.X, 0, 25),
+							Position = UDim2.fromOffset(DropdownFrame.AbsolutePosition.X,yBase - 30)
+						}):Play();
+					else
+						SearchBar.Visible = false;
+					end;
+				else
+					
+					TextBox.Text = "";
+					SearchBar.Visible = false;
+					SearchBar.Position = UDim2.fromOffset(DropdownFrame.AbsolutePosition.X,DropdownFrame.AbsolutePosition.Y);
+					
+					TweenSv:Create(DropdownFrame,TweenInfo.new(0.15),{
+						Size = UDim2.new(0, 153, 0, 0),
+					}):Play();
+				end;
+
+				if DropdownFrame.Size.Y.Offset <= 3 then
+					DropdownFrame.Visible = false;
+				else
+					DropdownFrame.Visible = true;
+				end;
+			end);
+		end;
 
 		self.Dropdown = DropdownSyyu;
 	end;
@@ -1924,7 +2047,7 @@ function HM.new(self)
 					Icon.Size = UDim2.new(0.600000024, 0, 0.600000024, 0)
 					Icon.SizeConstraint = Enum.SizeConstraint.RelativeYY
 					Icon.ZIndex = 13
-					
+
 					if HM.EnableIcon then
 						Icon.Image = "rbxassetid://10709791437"
 					else
@@ -2565,7 +2688,8 @@ function HM.new(self)
 					property.Default = property.Default or nil;
 					property.Multi = property.Multi or false;
 					property.Callback = property.Callback or function() end;
-
+					property.SearchBar = property.SearchBar or false;
+					
 					local IsArray = function(a)
 						for i,v in ipairs(a) do
 							return false;
@@ -2705,7 +2829,7 @@ function HM.new(self)
 
 					Button.MouseButton1Click:Connect(function()
 						DropdownSyu:Close();
-						DropdownSyu:Init(property.Values,property.Default,property.Multi,mv,UpdateFrame);
+						DropdownSyu:Init(property.Values,property.Default,property.Multi,mv,UpdateFrame,property.SearchBar);
 					end);
 
 					function property:SetValues(a)
@@ -2853,7 +2977,7 @@ function HM.new(self)
 				if v == MyVal then
 					v(true);
 				else
-					v(false)
+					v(false);
 				end;
 			end;
 		end)
@@ -3045,7 +3169,7 @@ function HM.new(self)
 		MinButtonT.Size = UDim2.new(1, 0, 1, 0)
 		MinButtonT.SizeConstraint = Enum.SizeConstraint.RelativeYY
 		MinButtonT.ZIndex = 250
-		
+
 		if HM.EnableIcon then
 			MinButtonT.Image = "rbxassetid://9886659276"
 		else
